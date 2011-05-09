@@ -1,0 +1,60 @@
+<html>
+<head>
+		<script type="text/javascript" src="/jquery"></script>
+		<script type="text/javascript">
+jQuery(document).ready(function(){
+
+
+   $("#controlSurface").click(function(e){	
+   
+    var x = e.pageX - this.offsetLeft-128;
+	var y = e.pageY - this.offsetTop-128;
+	
+	var angle = -135*Math.PI/180;
+	
+	
+	var x2 = Math.round(x*Math.cos(angle) + y*Math.sin(angle));
+	var y2 = Math.round(y*Math.cos(angle) - x*Math.sin(angle));
+
+      $('#controlSurface').html(x2 +', '+ y2);
+      
+      x2 = Math.abs(x2) < 25 ? 0 : x2;
+      y2 = Math.abs(y2) < 25 ? 0 : y2;
+      
+      $.get("/position", { x: 128+x2, y: 128+y2 } );
+
+   }); 
+   
+   $("#autonomous").click(function(e){	    
+      $.get("/position", { x: 255, y: 255 } );
+   }); 
+   
+   
+})
+</script>
+
+</head>
+
+<style>
+#controlSurface {
+	-webkit-transform:rotate(45deg);
+	width: 255px; 
+	height: 255px; 
+	background-color: lightgrey; 
+	border: 1px solid black; 
+	margin: 100px auto; 
+	text-align: center; 
+	vertical-align: middle;
+}
+
+</style>
+<body>
+
+<div id="controlSurface"></div>
+
+<br />
+<div align="center">
+<input type="button" id="autonomous" value="autonomous!"/>
+</div>
+</body>
+</html>
